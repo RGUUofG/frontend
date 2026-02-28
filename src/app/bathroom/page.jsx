@@ -3,6 +3,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import BathroomInteractions from "@/components/BathroomInteractions";
 
 export const page = () => {
   const [isLightOn, setIsLightOn] = useState(false);
@@ -40,6 +41,7 @@ export const page = () => {
           />
         )}
       </div>
+      {isLightOn && <BathroomInteractions />}
     </section>
   );
 };

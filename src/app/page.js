@@ -10,7 +10,7 @@ export default function Home() {
   const doors = [
     { id: 1, left: 0.06, top: 0.5, route: "/bathroom" },
     { id: 2, left: 0.3, top: 0.5, route: "/bedroom" },
-    { id: 3, left: 0.7, top: 0.5, route: "/common-room" },
+    { id: 3, left: 0.8, top: 0.5, route: "/common-room" },
   ];
 
   const handleClick = (route) => {

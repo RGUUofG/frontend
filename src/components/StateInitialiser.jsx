@@ -19,7 +19,7 @@ const StateInitialiser = ({ children }) => {
     }
 
     if (localStorage.getItem("lightsOn") === null) {
-      localStorage.setItem("lightsOn", "false");
+      localStorage.setItem("lightsOn", "true");
     }
   }, []);
   return <div>{children}</div>;
