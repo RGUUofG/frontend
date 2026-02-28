@@ -1,61 +1,31 @@
 "use client";
 
 import { AnimatePresence } from "motion/react";
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
 import Tub from "./Tub";
 import Toilet from "./Toilet";
 import Mirror from "./Mirror";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 const BathroomInteractions = () => {
   const [openTub, setOpenTub] = useState(false);
   const [openToilet, setOpenToilet] = useState(false);
   const [openMirror, setOpenMirror] = useState(false);
-  const router = useRouter();
-
-  // 🔹 热点数据化，增加 width/height
-  const hotspots = [
-    {
-      id: "tub",
-      left: 0.3,
-      top: 0.8,
-      width: 0.25, // 15% 宽
-      height: 0.18, // 8% 高
-      onClick: () => setOpenTub(true),
-    },
-    {
-      id: "toilet",
-      left: 0.52,
-      top: 0.88,
-      width: 0.1,
-      height: 0.14,
-      onClick: () => setOpenToilet(true),
-    },
-    {
-      id: "mirror",
-      left: 0.78,
-      top: 0.38,
-      width: 0.12,
-      height: 0.3,
-      onClick: () => setOpenMirror(true),
-    },
-    {
-      id: "back",
-      left: 0.05,
-      top: 0.9,
-      width: 0.08,
-      height: 0.05,
-      onClick: () => router.push("/"),
-    },
-  ];
-
   return (
     <div className="w-full h-full bg-[#00000053] relative flex items-center justify-center">
+      {/* <button
+        onClick={() => {
+          setOpenBook(true);
+        }}
+        className="w-40 rotate-[20deg] z-30 aspect-video absolute bottom-[30%] left-[33%] cursor-pointer"
+      /> */}
+
       <button
         onClick={() => {
           setOpenTub(true);
         }}
-        className="w-[20%] aspect-[16/6]  z-30 absolute bottom-[20%] left-[25%] cursor-pointer"
+        className="w-[20%] aspect-[16/6] z-30 absolute bottom-[20%] left-[25%] cursor-pointer"
       />
 
       <button
@@ -77,6 +47,15 @@ const BathroomInteractions = () => {
         {openToilet && <Toilet setOpenToilet={setOpenToilet} />}
         {openMirror && <Mirror setOpenMirror={setOpenMirror} />}
       </AnimatePresence>
+
+      <button
+        onClick={() => {
+          redirect("/");
+        }}
+        className="bottom-[20%] left-[5%] text-white absolute cursor-pointer hover:font-bold text-2xl"
+      >
+        Go Back
+      </button>
     </div>
   );
 };
