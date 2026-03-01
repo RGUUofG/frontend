@@ -3,6 +3,7 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import { useRef, useMemo, useState, useCallback, useEffect } from "react";
+import TextInput from "./TextInput";
 
 /* ============================================================
    🎛️  CONFIG
@@ -40,14 +41,13 @@ const CONFIG = {
   rotateTypingBoost: 0.008,
 
   // 能量平滑：attack 快、decay 慢 —— 每次按键快速响应，停后缓慢归零
-  attackRate: 0.55,   // 按键瞬间爬升速度（越大越快响应）
-  decayRate: 0.82,   // 停止后衰减速度（越小收得越快）
+  attackRate: 0.55, // 按键瞬间爬升速度（越大越快响应）
+  decayRate: 0.82, // 停止后衰减速度（越小收得越快）
 
   ringCount: 4,
   ringBaseSize: 320,
   ringSpacing: 80,
 };
-
 
 /* =======================
    粒子球
@@ -77,7 +77,11 @@ function TextSphere({ energy }) {
 
   const colorArray = useMemo(() => {
     const c = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) { c[i * 3] = 1; c[i * 3 + 1] = 1; c[i * 3 + 2] = 1; }
+    for (let i = 0; i < count; i++) {
+      c[i * 3] = 1;
+      c[i * 3 + 1] = 1;
+      c[i * 3 + 2] = 1;
+    }
     return c;
   }, [count]);
 
@@ -88,7 +92,8 @@ function TextSphere({ energy }) {
     // attack/decay 分离：energy.current > 0 时快速爬升，否则慢速衰减
     const target = energy.current;
     if (target > smoothEnergy.current) {
-      smoothEnergy.current += (target - smoothEnergy.current) * CONFIG.attackRate;
+      smoothEnergy.current +=
+        (target - smoothEnergy.current) * CONFIG.attackRate;
     } else {
       smoothEnergy.current *= CONFIG.decayRate;
     }
@@ -109,12 +114,27 @@ function TextSphere({ energy }) {
       const nElev = phi / Math.PI;
 
       // 各层波动全部乘以 e，静默时几乎不动
-      const lowWave = e * CONFIG.lowAmp * Math.sin(time * CONFIG.lowSpeed + phase * 0.5);
-      const latWave = e * CONFIG.midAmp * Math.sin(nElev * Math.PI * CONFIG.midRipples - time * CONFIG.midSpeed + phase * 0.15);
-      const highWave = e * CONFIG.highAmp * Math.sin(phase * 14 + time * CONFIG.highSpeed);
-      const rawSpike = Math.sin(theta * CONFIG.spikeCount * 0.5 + time * CONFIG.spikeSpeed + phase * 0.4);
-      const spikeWave = e * CONFIG.spikeAmp * Math.pow(Math.max(0, rawSpike), CONFIG.spikePow);
-      const breathe = CONFIG.breatheAmp * Math.sin(time * CONFIG.breatheSpeed + phase);
+      const lowWave =
+        e * CONFIG.lowAmp * Math.sin(time * CONFIG.lowSpeed + phase * 0.5);
+      const latWave =
+        e *
+        CONFIG.midAmp *
+        Math.sin(
+          nElev * Math.PI * CONFIG.midRipples -
+            time * CONFIG.midSpeed +
+            phase * 0.15,
+        );
+      const highWave =
+        e * CONFIG.highAmp * Math.sin(phase * 14 + time * CONFIG.highSpeed);
+      const rawSpike = Math.sin(
+        theta * CONFIG.spikeCount * 0.5 +
+          time * CONFIG.spikeSpeed +
+          phase * 0.4,
+      );
+      const spikeWave =
+        e * CONFIG.spikeAmp * Math.pow(Math.max(0, rawSpike), CONFIG.spikePow);
+      const breathe =
+        CONFIG.breatheAmp * Math.sin(time * CONFIG.breatheSpeed + phase);
 
       const disp = 1 + lowWave + latWave + highWave + spikeWave + breathe;
       const r = R * Math.max(0.9, disp); // max 抬高到 0.9，球不会内缩太多
@@ -137,24 +157,30 @@ function TextSphere({ energy }) {
     const r = Math.min(1, 0.55 + e * 0.45);
     const g = Math.min(1, 0.75 + e * 0.25);
     for (let i = 0; i < count; i++) {
-      colors[i * 3] = r; colors[i * 3 + 1] = g; colors[i * 3 + 2] = 1.0;
+      colors[i * 3] = r;
+      colors[i * 3 + 1] = g;
+      colors[i * 3 + 2] = 1.0;
     }
     ref.current.geometry.attributes.color.needsUpdate = true;
   });
 
   return (
     <Points ref={ref} positions={alignedBase.slice()}>
-      <bufferAttribute attach="geometry-attributes-color" args={[colorArray, 3]} />
+      <bufferAttribute
+        attach="geometry-attributes-color"
+        args={[colorArray, 3]}
+      />
       <PointMaterial
-        transparent vertexColors
+        transparent
+        vertexColors
         size={CONFIG.particleSize}
-        sizeAttenuation depthWrite={false}
+        sizeAttenuation
+        depthWrite={false}
         opacity={CONFIG.particleOpacity}
       />
     </Points>
   );
 }
-
 
 /* =======================
    外圈涟漪环
@@ -163,7 +189,8 @@ function RippleRings({ active }) {
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
       {Array.from({ length: CONFIG.ringCount }, (_, i) => (
-        <div key={i}
+        <div
+          key={i}
           style={{
             position: "absolute",
             width: `${CONFIG.ringBaseSize + i * CONFIG.ringSpacing}px`,
@@ -175,7 +202,6 @@ function RippleRings({ active }) {
     </div>
   );
 }
-
 
 /* =======================
    首页
@@ -194,19 +220,26 @@ export default function Agent() {
 
     clearTimeout(pulseTimer.current);
     // 脉冲持续 80ms 就归零，让 decay 接管 —— 短促干脆
-    pulseTimer.current = setTimeout(() => { energyRef.current = 0; }, 80);
+    pulseTimer.current = setTimeout(() => {
+      energyRef.current = 0;
+    }, 80);
 
     clearTimeout(typingTimer.current);
-    typingTimer.current = setTimeout(() => { setIsTyping(false); }, 1000);
+    typingTimer.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 1000);
   }, []);
 
-  useEffect(() => () => {
-    clearTimeout(typingTimer.current);
-    clearTimeout(pulseTimer.current);
-  }, []);
+  useEffect(
+    () => () => {
+      clearTimeout(typingTimer.current);
+      clearTimeout(pulseTimer.current);
+    },
+    [],
+  );
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden "  >
+    <div className="relative w-screen h-screen overflow-hidden ">
       <style>{`
         @keyframes ripplePulse { 0%,100%{transform:scale(1);opacity:.8} 50%{transform:scale(1.08);opacity:.3} }
         @keyframes gentlePulse { 0%,100%{transform:scale(1);opacity:.5} 50%{transform:scale(1.03);opacity:.2} }
@@ -217,44 +250,49 @@ export default function Agent() {
       <div className="absolute inset-0 " />
       <RippleRings active={isTyping} />
 
-      <Canvas camera={{ position: [0, 0, 4] }} style={{ position: "absolute", inset: 0 }}>
+      <Canvas
+        camera={{ position: [0, 0, 4] }}
+        style={{ position: "absolute", inset: 0 }}
+      >
         <ambientLight intensity={0.3} />
         <pointLight position={[0, 0, 3]} intensity={1} color="#88ccff" />
         <TextSphere energy={energyRef} />
       </Canvas>
 
-
-      <div style={{ position: "absolute", bottom: '20px', left: "50%", transform: "translateX(-50%)", pointerEvents: "auto", width: "min(560px, 88vw)", display: "flex", flexDirection: "column", gap: "10px" }}>
-        <div style={{
-          minHeight: "22px", color: "rgba(160,210,255,0.7)", fontSize: "13px",
-          letterSpacing: "0.12em", textAlign: "right", fontFamily: "monospace",
-          transition: "opacity 0.4s", opacity: text ? 1 : 0,
-        }}>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "20px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          pointerEvents: "auto",
+          width: "min(560px, 88vw)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+        }}
+      >
+        <div
+          style={{
+            minHeight: "22px",
+            color: "rgba(160,210,255,0.7)",
+            fontSize: "13px",
+            letterSpacing: "0.12em",
+            textAlign: "right",
+            fontFamily: "monospace",
+            transition: "opacity 0.4s",
+            opacity: text ? 1 : 0,
+          }}
+        >
           {text.length} chars
         </div>
 
-        <textarea
-          className="mirror-input x-10"
-          value={text}
-          onChange={handleInput}
-          placeholder="input there, feeling bolling ..."
-          rows={3}
-          style={{
-            width: "100%",
-            background: isTyping ? "rgba(100,180,255,0.07)" : "rgba(255,255,255,0.04)",
-            border: `1px solid ${isTyping ? "rgba(140,200,255,0.45)" : "rgba(180,210,255,0.18)"}`,
-            borderRadius: "14px", padding: "16px 20px",
-            color: "rgba(230,245,255,0.9)", fontSize: "15px",
-            lineHeight: "1.7", letterSpacing: "0.04em",
-            resize: "none", backdropFilter: "blur(12px)",
-            fontFamily: "'Gill Sans', 'Optima', sans-serif",
-            boxShadow: isTyping
-              ? "0 0 28px rgba(100,180,255,0.22), inset 0 0 14px rgba(100,180,255,0.07)"
-              : "none",
-            transition: "all 0.35s ease",
-          }}
+        <TextInput
+          text={text}
+          handleInput={handleInput}
+          isTyping={isTyping}
+          setText={setText}
         />
-
       </div>
     </div>
   );
