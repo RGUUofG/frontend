@@ -163,17 +163,14 @@ function RippleRings({ active }) {
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
       {Array.from({ length: CONFIG.ringCount }, (_, i) => (
-        <div key={i} style={{
-          position: "absolute",
-          width: `${CONFIG.ringBaseSize + i * CONFIG.ringSpacing}px`,
-          height: `${CONFIG.ringBaseSize + i * CONFIG.ringSpacing}px`,
-          borderRadius: "50%",
-          border: `1px solid rgba(180,220,255,${Math.max(0.02, 0.15 - i * 0.03)})`,
-          animation: active
-            ? `ripplePulse ${2 + i * 0.6}s ease-in-out infinite`
-            : `gentlePulse ${4 + i}s ease-in-out infinite`,
-          animationDelay: `${i * 0.4}s`,
-        }} />
+        <div key={i}
+          style={{
+            position: "absolute",
+            width: `${CONFIG.ringBaseSize + i * CONFIG.ringSpacing}px`,
+            height: `${CONFIG.ringBaseSize + i * CONFIG.ringSpacing}px`,
+            animation: `ripple 1.2s ${i * 0.15}s infinite`,
+          }}
+        />
       ))}
     </div>
   );
@@ -227,7 +224,7 @@ export default function Agent() {
       </Canvas>
 
 
-      <div style={{position:"absolute",bottom:'20px',left:"50%",transform:"translateX(-50%)", pointerEvents: "auto", width: "min(560px, 88vw)", display: "flex", flexDirection: "column", gap: "10px" }}>
+      <div style={{ position: "absolute", bottom: '20px', left: "50%", transform: "translateX(-50%)", pointerEvents: "auto", width: "min(560px, 88vw)", display: "flex", flexDirection: "column", gap: "10px" }}>
         <div style={{
           minHeight: "22px", color: "rgba(160,210,255,0.7)", fontSize: "13px",
           letterSpacing: "0.12em", textAlign: "right", fontFamily: "monospace",
