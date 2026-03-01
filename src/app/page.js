@@ -31,7 +31,7 @@ export default function Home() {
           <button
             key={door.id}
             onClick={() => router.push(door.route)}
-            className="hotspot aspect-[8/16]"
+            className="z-9 hotspot aspect-[8/16]"
             style={{
               left: `${door.left * 100}%`,
               top: `${door.top * 100}%`,

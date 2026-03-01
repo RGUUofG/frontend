@@ -206,7 +206,7 @@ export default function Agent() {
   }, []);
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden"  >
+    <div className="relative w-screen h-screen overflow-hidden "  >
       <style>{`
         @keyframes ripplePulse { 0%,100%{transform:scale(1);opacity:.8} 50%{transform:scale(1.08);opacity:.3} }
         @keyframes gentlePulse { 0%,100%{transform:scale(1);opacity:.5} 50%{transform:scale(1.03);opacity:.2} }
@@ -234,7 +234,7 @@ export default function Agent() {
         </div>
 
         <textarea
-          className="mirror-input"
+          className="mirror-input x-10"
           value={text}
           onChange={handleInput}
           placeholder="input there, feeling bolling ..."
