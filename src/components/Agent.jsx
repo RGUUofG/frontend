@@ -11,7 +11,7 @@ const CONFIG = {
   particleCount: 8000,
   particleSize: 0.011,
   particleOpacity: 0.92,
-  sphereRadius: 1.5,
+  sphereRadius: 1,
 
   // 低频整体起伏 —— 压到极小，不要球体整体鼓
   lowAmp: 0.04,
@@ -226,53 +226,38 @@ export default function Agent() {
         <TextSphere energy={energyRef} />
       </Canvas>
 
-      <div className="absolute inset-0 flex flex-col items-center justify-between pointer-events-none py-14">
-        {/* <h1 style={{
-          color: "rgba(255,255,255,0.9)",
-          fontSize: "clamp(16px, 2.5vw, 26px)",
-          fontWeight: 200,
-          letterSpacing: "0.55em",
-          textShadow: "0 0 30px rgba(120,200,255,0.6)",
-          fontFamily: "'Gill Sans', 'Optima', serif",
+
+      <div style={{position:"absolute",bottom:'20px',left:"50%",transform:"translateX(-50%)", pointerEvents: "auto", width: "min(560px, 88vw)", display: "flex", flexDirection: "column", gap: "10px" }}>
+        <div style={{
+          minHeight: "22px", color: "rgba(160,210,255,0.7)", fontSize: "13px",
+          letterSpacing: "0.12em", textAlign: "right", fontFamily: "monospace",
+          transition: "opacity 0.4s", opacity: text ? 1 : 0,
         }}>
-          MAGIC MIRROR
-        </h1> */}
-
-        <div style={{ pointerEvents: "auto", width: "min(560px, 88vw)", display: "flex", flexDirection: "column", gap: "10px" }}>
-          <div style={{
-            minHeight: "22px", color: "rgba(160,210,255,0.7)", fontSize: "13px",
-            letterSpacing: "0.12em", textAlign: "right", fontFamily: "monospace",
-            transition: "opacity 0.4s", opacity: text ? 1 : 0,
-          }}>
-            {text.length} chars
-          </div>
-
-          <textarea
-            className="mirror-input"
-            value={text}
-            onChange={handleInput}
-            placeholder="input there, feeling bolling 感受球体的共鸣..."
-            rows={3}
-            style={{
-              width: "100%",
-              background: isTyping ? "rgba(100,180,255,0.07)" : "rgba(255,255,255,0.04)",
-              border: `1px solid ${isTyping ? "rgba(140,200,255,0.45)" : "rgba(180,210,255,0.18)"}`,
-              borderRadius: "14px", padding: "16px 20px",
-              color: "rgba(230,245,255,0.9)", fontSize: "15px",
-              lineHeight: "1.7", letterSpacing: "0.04em",
-              resize: "none", backdropFilter: "blur(12px)",
-              fontFamily: "'Gill Sans', 'Optima', sans-serif",
-              boxShadow: isTyping
-                ? "0 0 28px rgba(100,180,255,0.22), inset 0 0 14px rgba(100,180,255,0.07)"
-                : "none",
-              transition: "all 0.35s ease",
-            }}
-          />
-
-          <p style={{ textAlign: "center", color: "rgba(150,190,230,0.35)", fontSize: "11px", letterSpacing: "0.2em", textTransform: "uppercase", margin: 0 }}>
-            每一个字，都是一次涟漪
-          </p>
+          {text.length} chars
         </div>
+
+        <textarea
+          className="mirror-input"
+          value={text}
+          onChange={handleInput}
+          placeholder="input there, feeling bolling ..."
+          rows={3}
+          style={{
+            width: "100%",
+            background: isTyping ? "rgba(100,180,255,0.07)" : "rgba(255,255,255,0.04)",
+            border: `1px solid ${isTyping ? "rgba(140,200,255,0.45)" : "rgba(180,210,255,0.18)"}`,
+            borderRadius: "14px", padding: "16px 20px",
+            color: "rgba(230,245,255,0.9)", fontSize: "15px",
+            lineHeight: "1.7", letterSpacing: "0.04em",
+            resize: "none", backdropFilter: "blur(12px)",
+            fontFamily: "'Gill Sans', 'Optima', sans-serif",
+            boxShadow: isTyping
+              ? "0 0 28px rgba(100,180,255,0.22), inset 0 0 14px rgba(100,180,255,0.07)"
+              : "none",
+            transition: "all 0.35s ease",
+          }}
+        />
+
       </div>
     </div>
   );
